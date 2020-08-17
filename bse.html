@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>BSE GRAPH</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1 class="text-5xl">BSE (Sensex)</h1>
+    <canvas id="myChart" width="1400" height="600"></canvas>
+
+    <script>
+      window.addEventListener("load", setup);
+
+      async function setup() {
+        const ctx = document.getElementById("myChart").getContext("2d");
+        const datastock = await getData();
+        const myChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: datastock.date,
+            datasets: [
+              {
+                label: "OPEN",
+                data: datastock.open,
+                fill: false,
+                borderColor: "rgba(255, 99, 132, 1)",
+                backgroundColor: "rgba(255, 99, 132, 0.5)",
+                borderWidth: 1,
+              },
+              {
+                label: "HIGH",
+                data: datastock.High,
+                fill: false,
+                borderColor: "rgba(99, 132, 255, 1)",
+                backgroundColor: "rgba(99, 132, 255, 0.5)",
+                borderWidth: 1,
+              },
+              {
+                label: "LOW",
+                data: datastock.Low,
+                fill: false,
+                borderColor: "rgba(99, 255, 132, 1)",
+                backgroundColor: "rgba(99, 255, 132, 0.5)",
+                borderWidth: 1,
+              },
+              {
+                label: "Close",
+                data: datastock.Close,
+                fill: false,
+                borderColor: "rgba(99, 255, 132, 1)",
+                backgroundColor: "rgba(99, 255, 132, 0.5)",
+                borderWidth: 1,
+              },
+              {
+                label: "Adj Close",
+                data: datastock.Adjclose,
+                fill: false,
+                borderColor: "rgba(99, 255, 132, 1)",
+                backgroundColor: "rgba(99, 255, 132, 0.5)",
+                borderWidth: 1,
+              },
+              {
+                label: "Volume",
+                data: datastock.Volume,
+                fill: false,
+                borderColor: "rgba(99, 255, 132, 1)",
+                backgroundColor: "rgba(99, 255, 132, 0.5)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {},
+        });
+      }
+
+      async function getData() {
+        const response = await fetch("BSE (Sensex).csv");
+        const data = await response.text();
+        const date = [];
+        const open = [];
+        const High = [];
+        const Low = [];
+        const Close = [];
+        const Adjclose = [];
+        const Volume = [];
+        const rows = data.split("\n").slice(1);
+        rows.forEach((row) => {
+          const cols = row.split(",");
+          date.push(cols[0]);
+          open.push(cols[1]);
+          High.push(cols[2]);
+          Low.push(cols[3]);
+          Close.push(cols[4]);
+          Adjclose.push(cols[5]);
+          Volume.push(cols[6]);
+        });
+        return { date, open, High, Low, Close, Adjclose, Volume };
+      }
+    </script>
+  </body>
+</html>
